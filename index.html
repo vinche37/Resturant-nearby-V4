@@ -103,12 +103,12 @@ body{
 /* hero — shrinks gracefully */
 .hero{padding:0 4px;flex-shrink:0}
 .hero-sub{
-  font-size:clamp(9px,1.1vh,11px);font-weight:400;color:var(--muted);
+  font-size:clamp(8px,1vh,10px);font-weight:400;color:var(--muted);
   letter-spacing:2px;text-transform:uppercase;
-  margin-bottom:clamp(3px,.6vh,7px);
+  margin-bottom:clamp(2px,.4vh,5px);
 }
 .hero-title{
-  font-size:clamp(1.8rem,6.5vh,3.4rem);
+  font-size:clamp(1.4rem,4.8vh,2.6rem);
   font-weight:800;line-height:.95;letter-spacing:-2px;color:var(--text);
 }
 .hero-title .grad{
@@ -118,30 +118,30 @@ body{
 
 /* categories */
 .cat-lbl{
-  font-size:clamp(9px,1.1vh,11px);color:var(--muted);
+  font-size:clamp(8px,1vh,10px);color:var(--muted);
   letter-spacing:1.5px;text-transform:uppercase;
-  margin-bottom:clamp(5px,.9vh,9px);padding-left:2px;
+  margin-bottom:clamp(4px,.7vh,7px);padding-left:2px;
 }
-.cat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(6px,1.2vw,10px)}
+.cat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(5px,1vw,8px)}
 .cat-btn{
   background:var(--glass);border:1px solid var(--glass-b);
   backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);
-  border-radius:clamp(12px,2.5vw,16px);
-  padding:clamp(10px,1.7vh,16px) 6px clamp(8px,1.4vh,13px);
-  display:flex;flex-direction:column;align-items:center;gap:clamp(3px,.7vh,6px);
+  border-radius:clamp(10px,2vw,14px);
+  padding:clamp(8px,1.3vh,12px) 4px clamp(6px,1vh,10px);
+  display:flex;flex-direction:column;align-items:center;gap:clamp(2px,.5vh,4px);
   cursor:pointer;touch-action:manipulation;
   transition:border-color .2s,background .2s,transform .12s,box-shadow .2s;
 }
 .cat-btn:active{transform:scale(.93)}
 .cat-btn.active{
   border-color:rgba(6,193,103,.6);background:rgba(6,193,103,.12);
-  box-shadow:0 0 20px rgba(6,193,103,.2),inset 0 1px 0 rgba(255,255,255,.08);
+  box-shadow:0 0 16px rgba(6,193,103,.2),inset 0 1px 0 rgba(255,255,255,.08);
 }
-.cat-e{font-size:clamp(1.3rem,3.2vh,1.9rem);line-height:1;transition:filter .2s}
+.cat-e{font-size:clamp(1.1rem,2.5vh,1.5rem);line-height:1;transition:filter .2s}
 .cat-btn.active .cat-e{filter:drop-shadow(0 0 8px rgba(6,193,103,.8))}
-.cat-n{font-size:clamp(11px,1.4vh,13px);font-weight:600;color:var(--muted);transition:color .2s}
+.cat-n{font-size:clamp(9px,1.2vh,12px);font-weight:600;color:var(--muted);transition:color .2s;text-align:center}
 .cat-btn.active .cat-n{color:#a0ffd0}
-.cat-c{font-size:clamp(9px,1.1vh,11px);color:var(--muted2);font-weight:300;transition:color .2s;text-align:center}
+.cat-c{font-size:clamp(8px,.95vh,10px);color:var(--muted2);font-weight:300;transition:color .2s;text-align:center;line-height:1.3}
 .cat-btn.active .cat-c{color:rgba(6,193,103,.65)}
 
 /* result — flex-grow to fill remaining space */
@@ -229,7 +229,7 @@ body{
 
 /* dice */
 .dice-btn{
-  width:100%;height:clamp(60px,9vh,78px);flex-shrink:0;
+  width:100%;height:clamp(52px,7.5vh,68px);flex-shrink:0;
   background:var(--glass);border:1px solid var(--glass-b);
   backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
   border-radius:clamp(14px,3vw,20px);cursor:pointer;
@@ -429,7 +429,7 @@ body{
         <span class="cat-c" id="cnt-restaurant">載入中</span>
       </button>
       <button class="cat-btn" data-cat="fastfood" onclick="pickCat(this)">
-        <span class="cat-e">🍟</span>
+        <span class="cat-e">🍔</span>
         <span class="cat-n">速食店</span>
         <span class="cat-c" id="cnt-fastfood">載入中</span>
       </button>
@@ -437,6 +437,11 @@ body{
         <span class="cat-e">🧋</span>
         <span class="cat-n">飲料店</span>
         <span class="cat-c" id="cnt-drinks">載入中</span>
+      </button>
+      <button class="cat-btn" data-cat="cafe" onclick="pickCat(this)">
+        <span class="cat-e">☕</span>
+        <span class="cat-n">咖啡館</span>
+        <span class="cat-c" id="cnt-cafe">載入中</span>
       </button>
     </div>
   </div>
@@ -497,32 +502,57 @@ body{
 
 <script>
 // ── GROUPS ───────────────────────────────────────
-const RESTAURANT_CUISINES=new Set(['taiwanese','japanese','korean','chinese','italian',
-  'american','thai','vietnamese','indian','cantonese','dim_sum','hotpot','bbq','steak',
-  'western','pizza','noodle','ramen','sushi','dumpling','rice','seafood','french','mexican',
-  'turkish','greek','spanish','portuguese','middle_eastern','african']);
-const FASTFOOD_CUISINES=new Set(['burger','sandwich','fried_chicken','kebab','fish_and_chips']);
-const DRINKS_CUISINES=new Set(['bubble_tea','ice_cream','dessert','juice','smoothie','tea','coffee']);
+// restaurant: sit-down meals, actual food dishes
+const RESTAURANT_CUISINES=new Set([
+  'taiwanese','japanese','korean','chinese','italian','american','thai','vietnamese',
+  'indian','cantonese','dim_sum','hotpot','bbq','steak','western','pizza','noodle',
+  'ramen','sushi','dumpling','rice','seafood','french','mexican','turkish','greek',
+  'spanish','portuguese','middle_eastern','african','asian','fusion','international'
+]);
+// fastfood: chain fast food — McDonald's / KFC style, amenity=fast_food OR known chains
+const FASTFOOD_BRANDS=new Set([
+  'mcdonalds','mcdonald\'s','kfc','burger king','wendy\'s','subway','pizza hut',
+  'domino\'s','dominos','mos burger','摩斯漢堡','麥當勞','肯德基','漢堡王',
+  'jollibee','carl\'s jr','hardee\'s','五guys','shake shack','in-n-out'
+]);
+const FASTFOOD_CUISINES=new Set(['burger','fried_chicken','fish_and_chips']);
 
-const AMENITY_TO_GROUP={restaurant:'restaurant',fast_food:'fastfood',
-  cafe:'drinks',ice_cream:'drinks',food_court:'restaurant'};
-const SHOP_TO_GROUP={bakery:'drinks'};
+// drinks: hand-shaken bubble tea / juice shops — NOT coffee
+const DRINKS_CUISINES=new Set([
+  'bubble_tea','juice','smoothie','tea','boba','shaved_ice'
+]);
+const DRINKS_NAMES=/(手搖|珍奶|茶飲|50嵐|貢茶|清心|天仁|鶴茶樓|麻古|迷客夏|茶湯會|一芳|春水堂|可不可|大苑子|七盞茶|丘比|初瓦|快可立)/;
+
+// cafe: coffee-focused — amenity=cafe OR cuisine=coffee
+const CAFE_CUISINES=new Set(['coffee','coffee_shop','espresso']);
+const CAFE_NAMES=/(咖啡|珈琲|スターバックス|starbucks|85度c|85°c|路易莎|louisa|cama|丹堤|伯朗|真鍋|西雅圖|怡客|is coffee)/i;
+
+
+const AMENITY_TO_GROUP={
+  restaurant:'restaurant',
+  fast_food:'fastfood',
+  food_court:'restaurant',
+  cafe:'cafe',        // amenity=cafe → coffee shop by default
+  ice_cream:'drinks',
+};
+const SHOP_TO_GROUP={bakery:'cafe'};
 
 const EMOJI_MAP={
   taiwanese:'🍱',noodle:'🍜',ramen:'🍜',rice:'🍚',dumpling:'🥟',dim_sum:'🥟',
   cantonese:'🥟',hotpot:'🫕',bbq:'🍢',japanese:'🍣',sushi:'🍣',korean:'🥘',
   chinese:'🥢',american:'🍔',burger:'🍔',pizza:'🍕',italian:'🍝',steak:'🥩',
   western:'🥗',thai:'🌶️',vietnamese:'🍲',indian:'🍛',fast_food:'🍟',sandwich:'🥪',
-  coffee_shop:'☕',cafe:'☕',ice_cream:'🍦',dessert:'🍰',bubble_tea:'🧋',
+  coffee_shop:'☕',cafe:'☕',coffee:'☕',ice_cream:'🍦',dessert:'🍰',bubble_tea:'🧋',
   breakfast:'🥚',bakery:'🥐',seafood:'🦐',french:'🥐',mexican:'🌮',kebab:'🌯',
+  juice:'🥤',smoothie:'🥤',tea:'🍵',
 };
-const GROUP_EMOJI={restaurant:'🍽️',fastfood:'🍟',drinks:'🧋'};
+const GROUP_EMOJI={restaurant:'🍽️',fastfood:'🍔',drinks:'🧋',cafe:'☕'};
 
 const MEALS={breakfast:'早餐',brunch:'早午餐',lunch:'午餐',afternoon:'下午茶',dinner:'晚餐',latenight:'宵夜'};
 
 // ── STATE ────────────────────────────────────────
 let lat=null,lng=null,locReady=false;
-let pools={restaurant:[],fastfood:[],drinks:[]};
+let pools={restaurant:[],fastfood:[],drinks:[],cafe:[]};
 let selectedCat='restaurant',rolling=false,currentRes=null;
 let history=[];
 
@@ -725,14 +755,31 @@ function distM(la,lo){
 function classifyGroup(tags){
   const amenity=(tags.amenity||'').toLowerCase();
   const shop=(tags.shop||'').toLowerCase();
+  const name=(tags['name:zh']||tags.name||'').toLowerCase();
+  const brand=(tags.brand||'').toLowerCase();
   const cuisines=(tags.cuisine||'').toLowerCase().split(/[;,]/).map(s=>s.trim().replace(/ /g,'_'));
-  for(const c of cuisines){
-    if(FASTFOOD_CUISINES.has(c)) return 'fastfood';
-    if(DRINKS_CUISINES.has(c))   return 'drinks';
-    if(RESTAURANT_CUISINES.has(c)) return 'restaurant';
-  }
+
+  // 1. Cafe: coffee cuisine OR known coffee brand name
+  if(cuisines.some(c=>CAFE_CUISINES.has(c))) return 'cafe';
+  if(amenity==='cafe' && !DRINKS_NAMES.test(name)) return 'cafe';
+  if(CAFE_NAMES.test(name)||CAFE_NAMES.test(brand)) return 'cafe';
+
+  // 2. Drinks: bubble tea / juice shops
+  if(cuisines.some(c=>DRINKS_CUISINES.has(c))) return 'drinks';
+  if(DRINKS_NAMES.test(name)||DRINKS_NAMES.test(brand)) return 'drinks';
+  if(amenity==='ice_cream') return 'drinks';
+
+  // 3. Fast food: amenity=fast_food OR known chain brand
+  if(amenity==='fast_food') return 'fastfood';
+  if(FASTFOOD_CUISINES.has(cuisines[0])) return 'fastfood';
+  const nameNorm=name.replace(/['\s]/g,'');
+  const brandNorm=brand.replace(/['\s]/g,'');
+  if([...FASTFOOD_BRANDS].some(b=>nameNorm.includes(b.replace(/['\s]/g,''))||brandNorm.includes(b.replace(/['\s]/g,'')))) return 'fastfood';
+
+  // 4. Restaurant: sit-down with cuisine tag, or generic amenity=restaurant
+  if(cuisines.some(c=>RESTAURANT_CUISINES.has(c))) return 'restaurant';
   if(AMENITY_TO_GROUP[amenity]) return AMENITY_TO_GROUP[amenity];
-  if(SHOP_TO_GROUP[shop])       return SHOP_TO_GROUP[shop];
+  if(SHOP_TO_GROUP[shop]) return SHOP_TO_GROUP[shop];
   return 'restaurant';
 }
 
@@ -746,13 +793,13 @@ function getEmoji(tags){
 }
 
 function processRestaurants(els){
-  pools={restaurant:[],fastfood:[],drinks:[]};
+  pools={restaurant:[],fastfood:[],drinks:[],cafe:[]};
   for(const e of els){
     if(!e.tags||(!(e.tags.name||e.tags['name:zh'])))continue;
     const t=e.tags,group=classifyGroup(t);
     const rawCuisine=(t.cuisine||'').split(/[;,]/)[0].trim();
     const cuisineLabel=rawCuisine||
-      (t.amenity==='cafe'?'咖啡廳':t.amenity==='fast_food'?'速食店':'餐廳');
+      (t.amenity==='cafe'?'咖啡館':t.amenity==='fast_food'?'速食店':'餐廳');
     pools[group].push({
       name:t['name:zh']||t.name,
       addr:t['addr:street']?(t['addr:housenumber']||'')+t['addr:street']:(t['addr:full']||''),
@@ -766,7 +813,6 @@ function processRestaurants(els){
   }
   for(const k of Object.keys(pools)){
     pools[k].sort((a,b)=>a.dist-b.dist);
-    // separate: confirmed closed → remove; open or unknown → keep
     pools[k] = pools[k].filter(r => r.ohStatus !== 'closed');
   }
 
@@ -783,6 +829,7 @@ function processRestaurants(els){
   $('cnt-restaurant').textContent = fmtCount(pools.restaurant);
   $('cnt-fastfood').textContent   = fmtCount(pools.fastfood);
   $('cnt-drinks').textContent     = fmtCount(pools.drinks);
+  $('cnt-cafe').textContent       = fmtCount(pools.cafe);
 
   const total=Object.values(pools).reduce((s,p)=>s+p.length,0);
   const cur=pools[selectedCat]?.length||0;

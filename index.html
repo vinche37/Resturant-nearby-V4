@@ -14,405 +14,207 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg0: #0b0718;
-  --bg1: #120d24;
-  --glass: rgba(255,255,255,0.06);
-  --glass-border: rgba(255,255,255,0.10);
-  --glass-hover: rgba(255,255,255,0.10);
-  --p1: #c84bff;
-  --p2: #ff3fa0;
-  --p3: #7b5fff;
-  --text: #f0eaff;
-  --muted: rgba(240,234,255,0.45);
-  --muted2: rgba(240,234,255,0.22);
-  --safe-top: env(safe-area-inset-top,0px);
-  --safe-bot: env(safe-area-inset-bottom,0px);
+  --bg0:#0b0718;--glass:rgba(255,255,255,0.06);--glass-b:rgba(255,255,255,0.10);
+  --p1:#c84bff;--p2:#ff3fa0;--p3:#7b5fff;
+  --text:#f0eaff;--muted:rgba(240,234,255,0.45);--muted2:rgba(240,234,255,0.18);
+  --safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overscroll-behavior:none}
+body{background:var(--bg0);color:var(--text);font-family:'Outfit','Noto Sans TC',sans-serif;
+  min-height:100vh;min-height:-webkit-fill-available;padding-top:var(--safe-top);overflow-x:hidden;}
 
-body {
-  background: var(--bg0);
-  color: var(--text);
-  font-family: 'Outfit', 'Noto Sans TC', sans-serif;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-  padding-top: var(--safe-top);
-  overflow-x: hidden;
-  position: relative;
-}
+.blobs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5}
+.b1{width:340px;height:340px;background:radial-gradient(circle,#8b2fc9,transparent 70%);top:-80px;left:-80px;animation:d1 12s ease-in-out infinite alternate}
+.b2{width:300px;height:300px;background:radial-gradient(circle,#c0185e,transparent 70%);top:30%;right:-100px;animation:d2 15s ease-in-out infinite alternate}
+.b3{width:260px;height:260px;background:radial-gradient(circle,#4a2fa0,transparent 70%);bottom:10%;left:-60px;animation:d1 10s ease-in-out infinite alternate-reverse}
+@keyframes d1{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,30px) scale(1.1)}}
+@keyframes d2{from{transform:translate(0,0) scale(1.05)}to{transform:translate(-30px,40px) scale(.95)}}
 
-/* ── BACKGROUND BLOBS ── */
-.blobs {
-  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
-}
-.blob {
-  position: absolute; border-radius: 50%; filter: blur(80px); opacity: .55;
-}
-.blob-1 {
-  width: 340px; height: 340px;
-  background: radial-gradient(circle, #8b2fc9 0%, transparent 70%);
-  top: -80px; left: -80px;
-  animation: drift1 12s ease-in-out infinite alternate;
-}
-.blob-2 {
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, #c0185e 0%, transparent 70%);
-  top: 30%; right: -100px;
-  animation: drift2 15s ease-in-out infinite alternate;
-}
-.blob-3 {
-  width: 260px; height: 260px;
-  background: radial-gradient(circle, #4a2fa0 0%, transparent 70%);
-  bottom: 10%; left: -60px;
-  animation: drift1 10s ease-in-out infinite alternate-reverse;
-}
-@keyframes drift1 {
-  from { transform: translate(0,0) scale(1); }
-  to   { transform: translate(40px,30px) scale(1.1); }
-}
-@keyframes drift2 {
-  from { transform: translate(0,0) scale(1.05); }
-  to   { transform: translate(-30px,40px) scale(.95); }
-}
+.page{position:relative;z-index:1;max-width:430px;margin:0 auto;
+  padding:24px 20px calc(40px + var(--safe-bot));display:flex;flex-direction:column;gap:16px;}
 
-/* ── PAGE ── */
-.page {
-  position: relative; z-index: 1;
-  max-width: 430px; margin: 0 auto;
-  padding: 24px 20px calc(36px + var(--safe-bot));
-  display: flex; flex-direction: column; gap: 18px;
-  min-height: 100vh; min-height: -webkit-fill-available;
-}
+.glass{background:var(--glass);border:1px solid var(--glass-b);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:20px;}
 
-/* ── GLASS MIXIN ── */
-.glass {
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 20px;
-}
+/* topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.tl{display:flex;flex-direction:column;gap:2px}
+.greeting{font-size:11px;font-weight:300;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.clock{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-1px;line-height:1}
+.meal-badge{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(200,75,255,.25),rgba(255,63,160,.2));
+  border:1px solid rgba(200,75,255,.35);color:#e0b0ff;letter-spacing:.5px;}
 
-/* ── TOP BAR ── */
-.topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px;
-}
-.topbar-left { display: flex; flex-direction: column; gap: 2px; }
-.greeting {
-  font-size: 11px; font-weight: 300; color: var(--muted);
-  letter-spacing: 1.5px; text-transform: uppercase;
-}
-.clock {
-  font-size: 20px; font-weight: 700; color: var(--text);
-  letter-spacing: -1px; line-height: 1;
-}
-.meal-badge {
-  font-size: 11px; font-weight: 600;
-  padding: 5px 12px; border-radius: 20px;
-  background: linear-gradient(135deg, rgba(200,75,255,.25), rgba(255,63,160,.2));
-  border: 1px solid rgba(200,75,255,.35);
-  color: #e0b0ff;
-  letter-spacing: .5px;
-}
+/* loc */
+.loc-bar{display:flex;align-items:center;gap:10px;padding:12px 16px}
+.loc-icon{width:32px;height:32px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(200,75,255,.3),rgba(123,95,255,.3));
+  border:1px solid rgba(200,75,255,.3);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.loc-info{flex:1;min-width:0}
+.loc-lbl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:400}
+.loc-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.loc-st{font-size:10px;font-weight:600;letter-spacing:.5px;padding:3px 9px;border-radius:10px;
+  background:rgba(6,193,103,.15);border:1px solid rgba(6,193,103,.3);color:#4dffa0;flex-shrink:0;}
+.loc-st.pending{background:rgba(255,200,0,.1);border-color:rgba(255,200,0,.2);color:#ffd75e}
 
-/* ── LOCATION BAR ── */
-.loc-bar {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px;
+/* hero */
+.hero{padding:4px 4px 0}
+.hero-sub{font-size:11px;font-weight:400;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.hero-title{font-size:clamp(2.6rem,12vw,3.6rem);font-weight:800;line-height:.95;letter-spacing:-2px;color:var(--text)}
+.hero-title .grad{background:linear-gradient(135deg,var(--p1),var(--p2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* ── CATEGORY BUTTONS ── */
+.cat-lbl{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;
+  font-weight:400;margin-bottom:10px;padding-left:2px;}
+.cat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cat-btn{
+  background:var(--glass);border:1.5px solid var(--glass-b);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:18px;padding:16px 6px 14px;
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  cursor:pointer;touch-action:manipulation;
+  transition:border-color .2s,background .2s,transform .12s,box-shadow .2s;
+  position:relative;overflow:hidden;
 }
-.loc-icon {
-  width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
-  background: linear-gradient(135deg, rgba(200,75,255,.3), rgba(123,95,255,.3));
-  border: 1px solid rgba(200,75,255,.3);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
+.cat-btn:active{transform:scale(.93)}
+.cat-btn.active{
+  border-color:rgba(200,75,255,.6);
+  background:rgba(200,75,255,.13);
+  box-shadow:0 0 20px rgba(200,75,255,.2), inset 0 1px 0 rgba(255,255,255,.1);
 }
-.loc-info { flex: 1; min-width: 0; }
-.loc-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; font-weight: 400; }
-.loc-name {
-  font-size: 13px; font-weight: 500; color: var(--text);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  margin-top: 1px;
+.cat-e{font-size:2rem;line-height:1;transition:filter .2s}
+.cat-btn.active .cat-e{filter:drop-shadow(0 0 12px rgba(200,75,255,.8)) drop-shadow(0 2px 4px rgba(255,63,160,.5))}
+.cat-n{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:-.2px;transition:color .2s}
+.cat-btn.active .cat-n{color:#f0c0ff}
+.cat-c{font-size:11px;color:var(--muted2);font-weight:300;transition:color .2s}
+.cat-btn.active .cat-c{color:rgba(200,75,255,.65)}
+
+/* result */
+.result-wrap{min-height:120px}
+.skeleton{display:flex;flex-direction:column;gap:10px;padding:20px}
+.sk{border-radius:6px;
+  background:linear-gradient(90deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.10) 50%,rgba(255,255,255,.06) 100%);
+  background-size:200% 100%;animation:shimmer 1.8s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sk:nth-child(1){height:16px;width:65%}
+.sk:nth-child(2){height:12px;width:40%}
+.sk:nth-child(3){height:12px;width:50%;margin-top:4px}
+
+.rcard{display:none;flex-direction:column;overflow:hidden}
+.rcard.show{display:flex;animation:cardIn .55s cubic-bezier(.34,1.4,.64,1) both}
+@keyframes cardIn{0%{opacity:0;transform:scale(.9) translateY(16px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+
+.rcard-header{padding:20px 20px 16px;
+  background:linear-gradient(135deg,rgba(200,75,255,.12),rgba(255,63,160,.08));
+  position:relative;overflow:hidden;}
+.rcard-header::before{content:'';position:absolute;top:-40px;right:-40px;
+  width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(200,75,255,.2),transparent 70%);}
+.dist-pill{position:absolute;top:0;right:0;
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  color:#fff;font-size:12px;font-weight:700;padding:4px 10px;
+  border-radius:0 0 0 12px;letter-spacing:-.3px;}
+.rcard-row{display:flex;gap:14px;align-items:flex-start;position:relative}
+.rcard-emoji{font-size:3rem;line-height:1;flex-shrink:0;filter:drop-shadow(0 4px 12px rgba(200,75,255,.5))}
+.rcard-text{flex:1;min-width:0}
+.rcard-name{font-size:1.35rem;font-weight:700;color:var(--text);letter-spacing:-.5px;line-height:1.2}
+.rcard-cuisine{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+.rcard-addr{font-size:12px;color:var(--muted);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.rcard-footer{display:flex;align-items:center;padding:14px 20px;gap:14px;
+  border-top:1px solid rgba(255,255,255,.07);}
+.eta-box{display:flex;flex-direction:column;gap:2px}
+.eta-lbl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.eta-val{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.5px}
+.btn-order{flex:1;background:linear-gradient(135deg,var(--p1),var(--p2));
+  color:#fff;border:none;border-radius:14px;padding:14px;
+  font-family:'Outfit','Noto Sans TC',sans-serif;font-size:13px;font-weight:700;cursor:pointer;
+  letter-spacing:.3px;box-shadow:0 4px 20px rgba(200,75,255,.35);
+  transition:transform .15s,filter .15s;touch-action:manipulation;}
+.btn-order:active{transform:scale(.96);filter:brightness(.88)}
+
+/* dice */
+.dice-btn{width:100%;height:80px;background:var(--glass);border:1px solid var(--glass-b);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  gap:14px;touch-action:manipulation;position:relative;overflow:hidden;
+  transition:transform .12s,border-color .2s;}
+.dice-btn::before{content:'';position:absolute;inset:-1px;border-radius:21px;z-index:-1;
+  background:linear-gradient(135deg,var(--p1),var(--p2),var(--p3));opacity:0;transition:opacity .3s;}
+.dice-btn:hover::before{opacity:1}
+.dice-btn::after{content:'';position:absolute;inset:0;border-radius:20px;
+  background:linear-gradient(135deg,rgba(200,75,255,.08),rgba(255,63,160,.05));pointer-events:none;}
+.dice-btn:active{transform:scale(.97)}
+.dice-btn.rolling{border-color:rgba(200,75,255,.5);animation:btnGlow .7s ease}
+@keyframes btnGlow{0%,100%{box-shadow:none}50%{box-shadow:0 0 30px rgba(200,75,255,.4),0 0 60px rgba(255,63,160,.2)}}
+.dice-icon{font-size:2.2rem;filter:drop-shadow(0 2px 8px rgba(200,75,255,.6));display:inline-block}
+.dice-btn.rolling .dice-icon{animation:diceRoll .7s ease}
+@keyframes diceRoll{0%{transform:rotate(0) scale(1)}25%{transform:rotate(-25deg) scale(.85)}70%{transform:rotate(380deg) scale(1.2)}100%{transform:rotate(360deg) scale(1)}}
+.dice-lbl{display:flex;flex-direction:column;gap:2px}
+.dice-main{font-size:1.1rem;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.dice-hint{font-size:11px;color:var(--muted);font-weight:300}
+
+.install-hint{text-align:center;font-size:12px;color:var(--muted);padding:10px 14px;line-height:1.6;display:none}
+.install-hint.show{display:block}
+.install-hint strong{color:#e0b0ff}
+
+/* overlays */
+.perm-overlay{position:fixed;inset:0;z-index:100;background:rgba(11,7,24,.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px;text-align:center;gap:16px;}
+.perm-overlay.gone{display:none}
+.perm-glow{width:100px;height:100px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  display:flex;align-items:center;justify-content:center;font-size:2.8rem;
+  box-shadow:0 0 60px rgba(200,75,255,.5);margin-bottom:8px;}
+.perm-title{font-size:1.5rem;font-weight:700;color:var(--text);letter-spacing:-.5px}
+.perm-desc{font-size:14px;color:var(--muted);line-height:1.7}
+.perm-desc strong{color:var(--text)}
+.btn-allow{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;border:none;
+  border-radius:16px;padding:16px 44px;font-family:'Outfit','Noto Sans TC',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;
+  box-shadow:0 4px 24px rgba(200,75,255,.4);transition:transform .15s;touch-action:manipulation;}
+.btn-allow:active{transform:scale(.96)}
+
+.load-overlay{position:fixed;inset:0;z-index:200;background:var(--bg0);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;}
+.load-overlay.gone{display:none}
+.load-ring{width:52px;height:52px;border:3px solid rgba(255,255,255,.08);border-top-color:var(--p1);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-text{font-size:13px;color:var(--muted);font-weight:300;letter-spacing:1px}
+/* ── OPEN STATUS TAG ── */
+.oh-tag {
+  display: inline-block; margin-top: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .5px;
+  padding: 3px 10px; border-radius: 20px;
 }
-.loc-status {
-  font-size: 10px; font-weight: 600; letter-spacing: .5px;
-  padding: 3px 9px; border-radius: 10px;
+.oh-open {
   background: rgba(6,193,103,.15);
-  border: 1px solid rgba(6,193,103,.3);
-  color: #4dffa0; flex-shrink: 0;
+  border: 1px solid rgba(6,193,103,.35);
+  color: #4dffa0;
 }
-.loc-status.pending {
-  background: rgba(255,200,0,.1); border-color: rgba(255,200,0,.2); color: #ffd75e;
+.oh-unknown {
+  background: rgba(255,200,0,.1);
+  border: 1px solid rgba(255,200,0,.2);
+  color: rgba(255,220,80,.7);
 }
-
-/* ── HERO ── */
-.hero { padding: 8px 4px; }
-.hero-sub {
-  font-size: 11px; font-weight: 400; color: var(--muted);
-  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
-}
-.hero-title {
-  font-size: clamp(2.6rem, 12vw, 3.6rem);
-  font-weight: 800; line-height: .95; letter-spacing: -2px; color: var(--text);
-}
-.hero-title .grad {
-  background: linear-gradient(135deg, var(--p1), var(--p2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ── RESULT CARD ── */
-.result-wrap { min-height: 130px; }
-
-.skeleton {
-  display: flex; flex-direction: column; gap: 10px; padding: 20px;
-}
-.skel-line {
-  border-radius: 6px;
-  background: linear-gradient(90deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.10) 50%, rgba(255,255,255,.06) 100%);
-  background-size: 200% 100%;
-  animation: shimmer 1.8s infinite;
-}
-@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-.skel-line:nth-child(1){ height:16px; width:65%; }
-.skel-line:nth-child(2){ height:12px; width:40%; }
-.skel-line:nth-child(3){ height:12px; width:50%; margin-top:4px; }
-
-.rcard { display: none; flex-direction: column; overflow: hidden; }
-.rcard.show { display: flex; animation: cardIn .55s cubic-bezier(.34,1.4,.64,1) both; }
-@keyframes cardIn {
-  0%  { opacity:0; transform:scale(.9) translateY(16px); }
-  100%{ opacity:1; transform:scale(1)  translateY(0);    }
-}
-
-.rcard-header {
-  padding: 20px 20px 16px;
-  background: linear-gradient(135deg, rgba(200,75,255,.12), rgba(255,63,160,.08));
-  position: relative; overflow: hidden;
-}
-.rcard-header::before {
-  content: '';
-  position: absolute; top: -40px; right: -40px;
-  width: 140px; height: 140px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(200,75,255,.2), transparent 70%);
-}
-.rcard-emoji-row {
-  display: flex; align-items: flex-start; gap: 14px; position: relative;
-}
-.rcard-emoji {
-  font-size: 3rem; line-height: 1; flex-shrink: 0;
-  filter: drop-shadow(0 4px 12px rgba(200,75,255,.5));
-}
-.rcard-text { flex: 1; min-width: 0; }
-.rcard-name {
-  font-size: 1.35rem; font-weight: 700; color: var(--text);
-  letter-spacing: -.5px; line-height: 1.2;
-}
-.rcard-cuisine {
-  font-size: 11px; color: var(--muted); letter-spacing: 1px;
-  text-transform: uppercase; margin-top: 4px; font-weight: 400;
-}
-.rcard-addr {
-  font-size: 12px; color: var(--muted); margin-top: 6px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.dist-pill {
-  position: absolute; top: 0; right: 0;
-  background: linear-gradient(135deg, var(--p1), var(--p2));
-  color: #fff; font-size: 12px; font-weight: 700;
-  padding: 4px 10px; border-radius: 0 0 0 12px;
-  letter-spacing: -.3px;
-}
-
-.rcard-footer {
-  display: flex; align-items: center;
-  padding: 14px 20px; gap: 14px;
-  border-top: 1px solid var(--glass-border);
-}
-.eta-box { display: flex; flex-direction: column; gap: 2px; }
-.eta-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
-.eta-val {
-  font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -.5px;
-}
-.btn-order {
-  flex: 1;
-  background: linear-gradient(135deg, var(--p1), var(--p2));
-  color: #fff; border: none; border-radius: 14px;
-  padding: 14px; font-family: 'Outfit','Noto Sans TC',sans-serif;
-  font-size: 13px; font-weight: 700; cursor: pointer;
-  letter-spacing: .3px;
-  box-shadow: 0 4px 20px rgba(200,75,255,.35);
-  transition: transform .15s, filter .15s; touch-action: manipulation;
-}
-.btn-order:active { transform: scale(.96); filter: brightness(.88); }
-
-/* ── DICE BUTTON ── */
-.dice-section { display: flex; flex-direction: column; gap: 12px; }
-
-.dice-btn {
-  width: 100%; height: 80px;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-radius: 20px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 14px;
-  touch-action: manipulation; position: relative; overflow: hidden;
-  transition: transform .12s, border-color .2s;
-}
-/* gradient border glow on idle */
-.dice-btn::before {
-  content: '';
-  position: absolute; inset: -1px; border-radius: 21px; z-index: -1;
-  background: linear-gradient(135deg, var(--p1), var(--p2), var(--p3));
-  opacity: 0; transition: opacity .3s;
-}
-.dice-btn:hover::before, .dice-btn:focus::before { opacity: 1; }
-.dice-btn::after {
-  content: '';
-  position: absolute; inset: 0; border-radius: 20px;
-  background: linear-gradient(135deg, rgba(200,75,255,.08), rgba(255,63,160,.05));
-  pointer-events: none;
-}
-.dice-btn:active { transform: scale(.97); }
-.dice-btn.rolling {
-  border-color: rgba(200,75,255,.5);
-  animation: btnGlow .7s ease;
-}
-@keyframes btnGlow {
-  0%,100%{ box-shadow: none; }
-  50%{ box-shadow: 0 0 30px rgba(200,75,255,.4), 0 0 60px rgba(255,63,160,.2); }
-}
-
-.dice-icon {
-  font-size: 2.2rem;
-  filter: drop-shadow(0 2px 8px rgba(200,75,255,.6));
-  display: inline-block;
-}
-.dice-btn.rolling .dice-icon { animation: diceRoll .7s ease; }
-@keyframes diceRoll {
-  0%  { transform: rotate(0)    scale(1); }
-  25% { transform: rotate(-25deg) scale(.85); }
-  70% { transform: rotate(380deg) scale(1.2); }
-  100%{ transform: rotate(360deg) scale(1); }
-}
-.dice-label {
-  display: flex; flex-direction: column; gap: 2px;
-}
-.dice-main {
-  font-size: 1.1rem; font-weight: 700; color: var(--text); letter-spacing: -.3px;
-}
-.dice-hint { font-size: 11px; color: var(--muted); font-weight: 300; }
-
-/* ── INSTALL HINT ── */
-.install-hint {
-  text-align: center; font-size: 12px; color: var(--muted);
-  padding: 10px 14px; line-height: 1.6; display: none;
-}
-.install-hint.show { display: block; }
-.install-hint strong { color: #e0b0ff; }
-
-/* ── PERMISSION OVERLAY ── */
-.perm-overlay {
-  position: fixed; inset: 0; z-index: 100;
-  background: rgba(11,7,24,.88);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 40px; text-align: center; gap: 16px;
-}
-.perm-overlay.gone { display: none; }
-.perm-glow {
-  width: 100px; height: 100px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--p1), var(--p2));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.8rem;
-  box-shadow: 0 0 60px rgba(200,75,255,.5);
-  margin-bottom: 8px;
-}
-.perm-title {
-  font-size: 1.5rem; font-weight: 700; color: var(--text); letter-spacing: -.5px;
-}
-.perm-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
-.perm-desc strong { color: var(--text); }
-.btn-allow {
-  background: linear-gradient(135deg, var(--p1), var(--p2));
-  color: #fff; border: none; border-radius: 16px;
-  padding: 16px 44px; font-family: 'Outfit','Noto Sans TC',sans-serif;
-  font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px;
-  box-shadow: 0 4px 24px rgba(200,75,255,.4);
-  transition: transform .15s; touch-action: manipulation;
-}
-.btn-allow:active { transform: scale(.96); }
-
-/* ── LOADING OVERLAY ── */
-.load-overlay {
-  position: fixed; inset: 0; z-index: 200;
-  background: var(--bg0);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 18px;
-}
-.load-overlay.gone { display: none; }
-.load-ring {
-  width: 52px; height: 52px;
-  border: 3px solid rgba(255,255,255,.08);
-  border-top-color: var(--p1);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.load-text { font-size: 13px; color: var(--muted); font-weight: 300; letter-spacing: 1px; }
-/* ── CATEGORY SELECTOR ── */
-.cat-section { display: flex; flex-direction: column; gap: 10px; }
-.cat-label {
-  font-size: 11px; font-weight: 400; color: var(--muted);
-  letter-spacing: 2px; text-transform: uppercase;
-}
-.cat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-.cat-btn {
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-radius: 16px; padding: 14px 8px;
-  display: flex; flex-direction: column; align-items: center; gap: 5px;
-  cursor: pointer; touch-action: manipulation;
-  transition: border-color .2s, background .2s, transform .12s;
-}
-.cat-btn:active { transform: scale(.94); }
-.cat-btn.active {
-  background: linear-gradient(135deg, rgba(200,75,255,.18), rgba(255,63,160,.12));
-  border-color: rgba(200,75,255,.55);
-  box-shadow: 0 0 20px rgba(200,75,255,.2);
-}
-.cat-emoji { font-size: 1.7rem; line-height: 1; }
-.cat-name {
-  font-size: 12px; font-weight: 600; color: var(--text);
-  letter-spacing: .3px;
-}
-.cat-btn.active .cat-name { color: #e8b0ff; }
-.cat-count {
-  font-size: 10px; color: var(--muted2);
-  font-family: 'Outfit', monospace; font-weight: 300;
-}
-.cat-btn.active .cat-count { color: rgba(220,160,255,.6); }
 </style>
 </head>
 <body>
 
 <div class="blobs">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
 </div>
 
-<!-- Loading -->
 <div class="load-overlay" id="loadOverlay">
   <div class="load-ring"></div>
   <div class="load-text" id="loadText">定位中...</div>
 </div>
 
-<!-- Permission -->
 <div class="perm-overlay gone" id="permOverlay">
   <div class="perm-glow">📍</div>
   <div class="perm-title">需要你的位置</div>
@@ -422,53 +224,71 @@ body {
 
 <div class="page">
 
-  <!-- Top bar -->
   <div class="glass topbar">
-    <div class="topbar-left">
+    <div class="tl">
       <div class="greeting">Hi，今天</div>
       <div class="clock" id="clock">--:--</div>
     </div>
     <div class="meal-badge" id="mealBadge">偵測中</div>
   </div>
 
-  <!-- Location -->
   <div class="glass loc-bar">
     <div class="loc-icon">📍</div>
     <div class="loc-info">
-      <div class="loc-label">你的位置</div>
+      <div class="loc-lbl">你的位置</div>
       <div class="loc-name" id="locName">定位中...</div>
     </div>
-    <div class="loc-status pending" id="locStatus">等待</div>
+    <div class="loc-st pending" id="locSt">等待</div>
   </div>
 
-  <!-- Hero -->
   <div class="hero">
-    <div class="hero-sub">附近餐廳推薦</div>
+    <div class="hero-sub">附近真實餐廳推薦</div>
     <div class="hero-title">今天<br>吃<span class="grad">什麼</span>？</div>
   </div>
 
-  <!-- Result -->
+  <!-- ── CATEGORY ── -->
+  <div>
+    <div class="cat-lbl">選一個類型</div>
+    <div class="cat-row">
+      <button class="cat-btn active" data-cat="restaurant" onclick="pickCat(this)">
+        <span class="cat-e">🍽️</span>
+        <span class="cat-n">餐廳</span>
+        <span class="cat-c" id="cnt-restaurant">載入中</span>
+      </button>
+      <button class="cat-btn" data-cat="fastfood" onclick="pickCat(this)">
+        <span class="cat-e">🍟</span>
+        <span class="cat-n">速食店</span>
+        <span class="cat-c" id="cnt-fastfood">載入中</span>
+      </button>
+      <button class="cat-btn" data-cat="drinks" onclick="pickCat(this)">
+        <span class="cat-e">🧋</span>
+        <span class="cat-n">飲料店</span>
+        <span class="cat-c" id="cnt-drinks">載入中</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── RESULT ── -->
   <div class="result-wrap">
     <div class="glass skeleton" id="skeleton">
-      <div class="skel-line"></div>
-      <div class="skel-line"></div>
-      <div class="skel-line"></div>
+      <div class="sk"></div><div class="sk"></div><div class="sk"></div>
     </div>
     <div class="glass rcard" id="rcard">
       <div class="rcard-header">
         <div class="dist-pill" id="rcDist">—</div>
-        <div class="rcard-emoji-row">
+        <div class="rcard-row">
           <div class="rcard-emoji" id="rcEmoji">🍽️</div>
           <div class="rcard-text">
             <div class="rcard-name" id="rcName">—</div>
             <div class="rcard-cuisine" id="rcCuisine">—</div>
             <div class="rcard-addr" id="rcAddr">—</div>
+            <div class="oh-tag oh-unknown" id="rcOH">? 未知營業時間</div>
           </div>
         </div>
       </div>
       <div class="rcard-footer">
         <div class="eta-box">
-          <div class="eta-label">預估外送</div>
+          <div class="eta-lbl">預估外送</div>
           <div class="eta-val" id="rcEta">—</div>
         </div>
         <button class="btn-order" onclick="openUber()">Uber Eats 訂餐 →</button>
@@ -476,40 +296,17 @@ body {
     </div>
   </div>
 
-  <!-- Install hint -->
   <div class="install-hint" id="installHint">
     💡 Safari → <strong>分享</strong> → 加入主畫面，解鎖完整 GPS
   </div>
 
-  <!-- Category selector -->
-  <div class="cat-section">
-    <div class="cat-label">選一個類型</div>
-    <div class="cat-row">
-      <button class="cat-btn" id="cat-restaurant" onclick="selectCat('restaurant')">
-        <span class="cat-emoji">🍽️</span>
-        <span class="cat-name">餐廳</span>
-        <span class="cat-count" id="cnt-restaurant">—</span>
-      </button>
-      <button class="cat-btn" id="cat-fastfood" onclick="selectCat('fastfood')">
-        <span class="cat-emoji">🍟</span>
-        <span class="cat-name">速食店</span>
-        <span class="cat-count" id="cnt-fastfood">—</span>
-      </button>
-      <button class="cat-btn" id="cat-drinks" onclick="selectCat('drinks')">
-        <span class="cat-emoji">🧋</span>
-        <span class="cat-name">飲料店</span>
-        <span class="cat-count" id="cnt-drinks">—</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Dice -->
-  <div class="dice-section">
+  <!-- ── DICE ── -->
+  <div>
     <button class="dice-btn" id="diceBtn" onclick="roll()">
       <span class="dice-icon">🎲</span>
-      <div class="dice-label">
+      <div class="dice-lbl">
         <span class="dice-main">幫我決定</span>
-        <span class="dice-hint" id="diceHint">先選上方類型</span>
+        <span class="dice-hint" id="diceHint">載入附近餐廳中...</span>
       </div>
     </button>
   </div>
@@ -517,36 +314,34 @@ body {
 </div>
 
 <script>
-// ── CUISINE MAP ──────────────────────────────────
-const CM={
-  taiwanese:{l:'台式',e:'🍱'},noodle:{l:'麵食',e:'🍜'},ramen:{l:'拉麵',e:'🍜'},
-  rice:{l:'米食',e:'🍚'},dumpling:{l:'水餃',e:'🥟'},dim_sum:{l:'港式',e:'🥟'},
-  cantonese:{l:'港式',e:'🥟'},hotpot:{l:'火鍋',e:'🫕'},bbq:{l:'燒烤',e:'🍢'},
-  japanese:{l:'日式',e:'🍣'},sushi:{l:'壽司',e:'🍣'},korean:{l:'韓式',e:'🥘'},
-  chinese:{l:'中式',e:'🥢'},american:{l:'美式',e:'🍔'},burger:{l:'漢堡',e:'🍔'},
-  pizza:{l:'披薩',e:'🍕'},italian:{l:'義式',e:'🍝'},steak:{l:'牛排',e:'🥩'},
-  western:{l:'西式',e:'🥗'},thai:{l:'泰式',e:'🌶️'},vietnamese:{l:'越式',e:'🍲'},
-  indian:{l:'印度',e:'🍛'},fast_food:{l:'速食',e:'🍟'},sandwich:{l:'三明治',e:'🥪'},
-  coffee_shop:{l:'咖啡',e:'☕'},cafe:{l:'咖啡',e:'☕'},ice_cream:{l:'甜點',e:'🍦'},
-  dessert:{l:'甜點',e:'🍰'},bubble_tea:{l:'手搖',e:'🧋'},
-  breakfast:{l:'早餐',e:'🥚'},bakery:{l:'麵包',e:'🥐'},
+// ── GROUPS ───────────────────────────────────────
+const RESTAURANT_CUISINES=new Set(['taiwanese','japanese','korean','chinese','italian',
+  'american','thai','vietnamese','indian','cantonese','dim_sum','hotpot','bbq','steak',
+  'western','pizza','noodle','ramen','sushi','dumpling','rice','seafood','french','mexican',
+  'turkish','greek','spanish','portuguese','middle_eastern','african']);
+const FASTFOOD_CUISINES=new Set(['burger','sandwich','fried_chicken','kebab','fish_and_chips']);
+const DRINKS_CUISINES=new Set(['bubble_tea','ice_cream','dessert','juice','smoothie','tea','coffee']);
+
+const AMENITY_TO_GROUP={restaurant:'restaurant',fast_food:'fastfood',
+  cafe:'drinks',ice_cream:'drinks',food_court:'restaurant'};
+const SHOP_TO_GROUP={bakery:'drinks'};
+
+const EMOJI_MAP={
+  taiwanese:'🍱',noodle:'🍜',ramen:'🍜',rice:'🍚',dumpling:'🥟',dim_sum:'🥟',
+  cantonese:'🥟',hotpot:'🫕',bbq:'🍢',japanese:'🍣',sushi:'🍣',korean:'🥘',
+  chinese:'🥢',american:'🍔',burger:'🍔',pizza:'🍕',italian:'🍝',steak:'🥩',
+  western:'🥗',thai:'🌶️',vietnamese:'🍲',indian:'🍛',fast_food:'🍟',sandwich:'🥪',
+  coffee_shop:'☕',cafe:'☕',ice_cream:'🍦',dessert:'🍰',bubble_tea:'🧋',
+  breakfast:'🥚',bakery:'🥐',seafood:'🦐',french:'🥐',mexican:'🌮',kebab:'🌯',
 };
-const DEF={l:'餐廳',e:'🍽️'};
-const PREFS={
-  breakfast:['早餐','咖啡','麵包','三明治'],
-  brunch:   ['早餐','咖啡','西式','麵包'],
-  lunch:    ['台式','麵食','米食','日式','中式','韓式','越式','泰式','港式'],
-  afternoon:['咖啡','甜點','手搖','麵包'],
-  dinner:   ['台式','日式','韓式','火鍋','牛排','燒烤','港式','中式','泰式','印度','義式'],
-  latenight:['台式','麵食','漢堡','披薩','速食','火鍋'],
-};
-const MEALS={
-  breakfast:'早餐',brunch:'早午餐',lunch:'午餐',
-  afternoon:'下午茶',dinner:'晚餐',latenight:'宵夜'
-};
+const GROUP_EMOJI={restaurant:'🍽️',fastfood:'🍟',drinks:'🧋'};
+
+const MEALS={breakfast:'早餐',brunch:'早午餐',lunch:'午餐',afternoon:'下午茶',dinner:'晚餐',latenight:'宵夜'};
 
 // ── STATE ────────────────────────────────────────
-let lat=null,lng=null,locReady=false,allRest=[],rolling=false,currentRes=null;
+let lat=null,lng=null,locReady=false;
+let pools={restaurant:[],fastfood:[],drinks:[]};
+let selectedCat='restaurant',rolling=false,currentRes=null;
 
 // ── CLOCK ────────────────────────────────────────
 function getMeal(){
@@ -561,7 +356,6 @@ function tick(){
   document.getElementById('mealBadge').textContent=MEALS[getMeal()]||'';
 }
 
-// ── LOCATION ─────────────────────────────────────
 const $=id=>document.getElementById(id);
 function isIOS(){return/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream}
 function isStandalone(){return window.navigator.standalone===true||window.matchMedia('(display-mode:standalone)').matches}
@@ -570,23 +364,20 @@ function hideLoad(){$('loadOverlay').classList.add('gone')}
 function showPerm(){$('permOverlay').classList.remove('gone')}
 function hidePerm(){$('permOverlay').classList.add('gone')}
 
-function setLoc(la,lo,name){
+// ── LOCATION ─────────────────────────────────────
+function setLoc(la,lo,name,sub){
   lat=la;lng=lo;locReady=true;
   $('locName').textContent=name;
-  $('locStatus').textContent='GPS ✓';
-  $('locStatus').classList.remove('pending');
+  $('locSt').textContent=sub||'GPS ✓';
+  $('locSt').classList.remove('pending');
   hidePerm();
 }
-
 function requestGPS(){
   hidePerm();setLoad('取得 GPS...');
   navigator.geolocation.getCurrentPosition(
     p=>geoOK(p.coords.latitude,p.coords.longitude),
-    _=>fallbackIP(),
-    {enableHighAccuracy:true,timeout:12000,maximumAge:60000}
-  );
+    _=>fallbackIP(),{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
 }
-
 async function geoOK(la,lo){
   setLoad('解析地址...');
   try{
@@ -594,19 +385,17 @@ async function geoOK(la,lo){
     const d=await r.json(),a=d.address||{};
     const name=[a.suburb||a.neighbourhood||a.quarter||a.village,
                 a.city||a.town||a.county].filter(Boolean).slice(0,2).join(' ');
-    setLoc(la,lo,name||`${la.toFixed(2)},${lo.toFixed(2)}`);
-  }catch{setLoc(la,lo,`${la.toFixed(2)},${lo.toFixed(2)}`);}
+    setLoc(la,lo,name||`${la.toFixed(2)},${lo.toFixed(2)}`,'GPS ✓');
+  }catch{setLoc(la,lo,`${la.toFixed(2)},${lo.toFixed(2)}`,'GPS ✓');}
   await fetchRestaurants();
 }
-
 async function fallbackIP(){
   setLoad('IP 定位...');
   try{
     const r=await fetch('https://ip-api.com/json/?fields=status,city,district,lat,lon&lang=zh-CN');
     const d=await r.json();
     if(d.status==='success'){
-      $('locStatus').textContent='IP';
-      setLoc(d.lat,d.lon,[d.city,d.district].filter(Boolean).join(' ')||'附近');
+      setLoc(d.lat,d.lon,[d.city,d.district].filter(Boolean).join(' ')||'附近','IP');
       await fetchRestaurants();return;
     }
   }catch{}
@@ -614,16 +403,10 @@ async function fallbackIP(){
     const r=await fetch('https://ipinfo.io/json');
     const d=await r.json();
     const[la,lo]=(d.loc||'25.033,121.565').split(',').map(Number);
-    $('locStatus').textContent='IP';
-    setLoc(la,lo,[d.city,d.region].filter(Boolean).join(' ')||'附近');
+    setLoc(la,lo,[d.city,d.region].filter(Boolean).join(' ')||'附近','IP');
     await fetchRestaurants();
-  }catch{
-    $('locStatus').textContent='預設';
-    setLoc(25.033,121.565,'台北市');
-    await fetchRestaurants();
-  }
+  }catch{setLoc(25.033,121.565,'台北市','預設');await fetchRestaurants();}
 }
-
 function initLoc(){
   if(isIOS()&&!isStandalone())$('installHint').classList.add('show');
   if(!navigator.geolocation){fallbackIP();return}
@@ -632,13 +415,103 @@ function initLoc(){
   navigator.geolocation.getCurrentPosition(
     p=>{clearTimeout(t);geoOK(p.coords.latitude,p.coords.longitude)},
     _=>{clearTimeout(t);hideLoad();showPerm();fallbackIP();},
-    {enableHighAccuracy:true,timeout:12000,maximumAge:300000}
-  );
+    {enableHighAccuracy:true,timeout:12000,maximumAge:300000});
 }
 
-// ── OVERPASS ─────────────────────────────────────
+// ── OPENING HOURS PARSER ─────────────────────────
+// Parses OSM opening_hours format and checks if currently open
+// Supports: Mo-Fr 10:00-22:00; Sa 11:00-20:00; PH off; 24/7 etc.
+
+const DAY_MAP = { mo:0,tu:1,we:2,th:3,fr:4,sa:5,su:6 };
+const DAY_NAMES = ['mo','tu','we','th','fr','sa','su'];
+
+function isOpenNow(oh) {
+  if (!oh || oh.trim() === '') return null; // unknown → include by default
+  oh = oh.toLowerCase().trim();
+  if (oh === '24/7') return true;
+  if (oh === 'yes' || oh === 'open') return true;
+  if (oh === 'no'  || oh === 'closed') return false;
+
+  const now  = new Date();
+  const dow  = (now.getDay() + 6) % 7; // 0=Mo … 6=Su
+  const mins = now.getHours() * 60 + now.getMinutes();
+
+  // split by semicolon into rules
+  const rules = oh.split(/\s*;\s*/);
+  let result = null; // null = no rule matched
+
+  for (const rule of rules) {
+    const r = rule.trim();
+    if (!r) continue;
+
+    // --- "off" / "closed" rule ---
+    if (/\boff\b|\bclosed\b/.test(r)) {
+      // e.g. "PH off" — skip PH, treat as closed segment
+      result = false;
+      continue;
+    }
+
+    // --- parse day range ---
+    // patterns: "mo-fr", "mo,we,fr", "mo", or no day (means every day)
+    let dayMatch = r.match(/^([a-z]{2}(?:[-,][a-z]{2})*)\s+/);
+    let applicableDays = null; // null = applies every day
+
+    if (dayMatch) {
+      const dayStr = dayMatch[1];
+      applicableDays = new Set();
+      // handle comma-separated or range
+      const parts = dayStr.split(',');
+      for (const part of parts) {
+        if (part.includes('-')) {
+          const [s, e] = part.split('-');
+          const si = DAY_MAP[s], ei = DAY_MAP[e];
+          if (si !== undefined && ei !== undefined) {
+            // handle wrap-around (e.g. fr-su)
+            if (si <= ei) {
+              for (let d = si; d <= ei; d++) applicableDays.add(d);
+            } else {
+              for (let d = si; d <= 6; d++) applicableDays.add(d);
+              for (let d = 0; d <= ei; d++) applicableDays.add(d);
+            }
+          }
+        } else {
+          const di = DAY_MAP[part.trim()];
+          if (di !== undefined) applicableDays.add(di);
+        }
+      }
+      if (!applicableDays.has(dow)) continue; // this rule doesn't apply today
+    }
+
+    // --- parse time range ---
+    // extract all HH:MM-HH:MM patterns
+    const timeRe = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/g;
+    let timeMatch;
+    let foundTime = false;
+    while ((timeMatch = timeRe.exec(r)) !== null) {
+      foundTime = true;
+      const [sh, sm] = timeMatch[1].split(':').map(Number);
+      const [eh, em] = timeMatch[2].split(':').map(Number);
+      const start = sh * 60 + sm;
+      let   end   = eh * 60 + em;
+      if (end < start) end += 24 * 60; // overnight e.g. 22:00-02:00
+      if (mins >= start && mins <= end) { result = true; break; }
+    }
+    if (foundTime && result !== true) result = false; // rule applies today but not in time range
+    if (!foundTime && applicableDays !== null) result = true; // day matched, no time = all day
+  }
+
+  return result; // null = no data, true = open, false = closed
+}
+
+function openStatus(oh) {
+  const s = isOpenNow(oh);
+  if (s === true)  return 'open';
+  if (s === false) return 'closed';
+  return 'unknown'; // no opening_hours data
+}
+
 async function fetchRestaurants(radius=1200){
-  setLoad(`搜尋 ${radius}m 內餐廳...`);
+  setLoad(`搜尋 ${radius}m 內...`);
   const q=`[out:json][timeout:25];(
     node["amenity"="restaurant"](around:${radius},${lat},${lng});
     node["amenity"="fast_food"](around:${radius},${lat},${lng});
@@ -651,10 +524,8 @@ async function fetchRestaurants(radius=1200){
   for(const ep of['https://overpass-api.de/api/interpreter','https://lz4.overpass-api.de/api/interpreter']){
     try{
       const r=await fetch(ep,{method:'POST',body:'data='+encodeURIComponent(q),
-        headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        signal:AbortSignal.timeout(20000)});
-      if(!r.ok)throw 0;
-      els=(await r.json()).elements||[];break;
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},signal:AbortSignal.timeout(20000)});
+      if(!r.ok)throw 0;els=(await r.json()).elements||[];break;
     }catch{}
   }
   hideLoad();
@@ -662,114 +533,133 @@ async function fetchRestaurants(radius=1200){
   processRestaurants(els);
 }
 
-function classify(tags){
-  const c=(tags.cuisine||'').toLowerCase();
-  const a=(tags.amenity||'').toLowerCase(),s=(tags.shop||'').toLowerCase();
-  for(const p of c.split(/[;,]/)){const t=p.trim().replace(/ /g,'_');if(CM[t])return CM[t];}
-  if(a==='cafe')return CM.cafe;if(a==='fast_food')return CM.fast_food;
-  if(a==='ice_cream')return CM.ice_cream;if(s==='bakery')return CM.bakery;
-  return DEF;
-}
 function distM(la,lo){
   const R=6371000,dLat=(la-lat)*Math.PI/180,dLon=(lo-lng)*Math.PI/180,
     a=Math.sin(dLat/2)**2+Math.cos(lat*Math.PI/180)*Math.cos(la*Math.PI/180)*Math.sin(dLon/2)**2;
   return Math.round(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
 }
-// ── CATEGORY GROUPS ──────────────────────────────
-const FAST_FOOD_CUISINES = new Set(['fast_food','burger','american','pizza','sandwich','速食','漢堡','美式','披薩','三明治']);
-const DRINK_AMENITIES    = new Set(['cafe','ice_cream','bubble_tea']);
-const DRINK_CUISINES     = new Set(['cafe','coffee_shop','ice_cream','dessert','bubble_tea','咖啡','甜點','手搖']);
 
-function getGroup(res){
-  const a=(res._amenity||'').toLowerCase();
-  const c=(res.cuisine||{}).l||'';
-  const cRaw=(res._cuisineRaw||'').toLowerCase();
-  if(DRINK_AMENITIES.has(a)||DRINK_CUISINES.has(c)||cRaw.includes('bubble')||cRaw.includes('tea')||cRaw.includes('coffee'))
-    return 'drinks';
-  if(a==='fast_food'||FAST_FOOD_CUISINES.has(c)) return 'fastfood';
+function classifyGroup(tags){
+  const amenity=(tags.amenity||'').toLowerCase();
+  const shop=(tags.shop||'').toLowerCase();
+  const cuisines=(tags.cuisine||'').toLowerCase().split(/[;,]/).map(s=>s.trim().replace(/ /g,'_'));
+  for(const c of cuisines){
+    if(FASTFOOD_CUISINES.has(c)) return 'fastfood';
+    if(DRINKS_CUISINES.has(c))   return 'drinks';
+    if(RESTAURANT_CUISINES.has(c)) return 'restaurant';
+  }
+  if(AMENITY_TO_GROUP[amenity]) return AMENITY_TO_GROUP[amenity];
+  if(SHOP_TO_GROUP[shop])       return SHOP_TO_GROUP[shop];
   return 'restaurant';
 }
 
-let catPools = { restaurant:[], fastfood:[], drinks:[] };
-let selectedCat = null;
-
-function processRestaurants(els){
-  allRest=els.filter(e=>e.tags&&(e.tags.name||e.tags['name:zh']))
-    .map(e=>{const t=e.tags;return{
-      name:t['name:zh']||t.name,
-      addr:t['addr:street']?(t['addr:housenumber']||'')+t['addr:street']:(t['addr:full']||''),
-      lat:e.lat,lon:e.lon,cuisine:classify(t),dist:distM(e.lat,e.lon),
-      _amenity:t.amenity||'',_cuisineRaw:t.cuisine||'',
-    }}).sort((a,b)=>a.dist-b.dist);
-
-  catPools={restaurant:[],fastfood:[],drinks:[]};
-  for(const r of allRest) catPools[getGroup(r)].push(r);
-
-  // update counts
-  $('cnt-restaurant').textContent=catPools.restaurant.length+'間';
-  $('cnt-fastfood').textContent=catPools.fastfood.length+'間';
-  $('cnt-drinks').textContent=catPools.drinks.length+'間';
-
-  $('diceHint').textContent='先選上方類型';
+function getEmoji(tags){
+  const cuisines=(tags.cuisine||'').toLowerCase().split(/[;,]/).map(s=>s.trim().replace(/ /g,'_'));
+  for(const c of cuisines){if(EMOJI_MAP[c])return EMOJI_MAP[c];}
+  const a=(tags.amenity||'').toLowerCase();
+  if(a==='cafe')return'☕';if(a==='ice_cream')return'🍦';if(a==='fast_food')return'🍟';
+  if((tags.shop||'')==='bakery')return'🥐';
+  return null;
 }
 
-function selectCat(cat){
-  selectedCat=cat;
-  ['restaurant','fastfood','drinks'].forEach(c=>{
-    $('cat-'+c).classList.toggle('active', c===cat);
-  });
-  const n=catPools[cat]?.length||0;
-  const label={restaurant:'餐廳',fastfood:'速食店',drinks:'飲料店'}[cat];
-  $('diceHint').textContent=n>0?`從 ${n} 間${label}中隨機抽`:'這類型附近找不到';
+function processRestaurants(els){
+  pools={restaurant:[],fastfood:[],drinks:[]};
+  for(const e of els){
+    if(!e.tags||(!(e.tags.name||e.tags['name:zh'])))continue;
+    const t=e.tags,group=classifyGroup(t);
+    const rawCuisine=(t.cuisine||'').split(/[;,]/)[0].trim();
+    const cuisineLabel=rawCuisine||
+      (t.amenity==='cafe'?'咖啡廳':t.amenity==='fast_food'?'速食店':'餐廳');
+    pools[group].push({
+      name:t['name:zh']||t.name,
+      addr:t['addr:street']?(t['addr:housenumber']||'')+t['addr:street']:(t['addr:full']||''),
+      lat:e.lat,lon:e.lon,
+      emoji:getEmoji(t)||GROUP_EMOJI[group],
+      cuisine:cuisineLabel,
+      dist:distM(e.lat,e.lon),
+      oh: t.opening_hours || '',
+      ohStatus: openStatus(t.opening_hours || ''),
+    });
+  }
+  for(const k of Object.keys(pools)){
+    pools[k].sort((a,b)=>a.dist-b.dist);
+    // separate: confirmed closed → remove; open or unknown → keep
+    pools[k] = pools[k].filter(r => r.ohStatus !== 'closed');
+  }
+
+  const fmtCount = (arr) => {
+    const known   = arr.filter(r=>r.ohStatus==='open').length;
+    const unknown = arr.filter(r=>r.ohStatus==='unknown').length;
+    if(!arr.length) return '無資料';
+    if(known===0 && unknown>0) return `${unknown} 間`;
+    if(known>0 && unknown>0)   return `${known}+${unknown} 間`;
+    return `${known} 間`;
+  };
+
+  $('cnt-restaurant').textContent = fmtCount(pools.restaurant);
+  $('cnt-fastfood').textContent   = fmtCount(pools.fastfood);
+  $('cnt-drinks').textContent     = fmtCount(pools.drinks);
+
+  const total=Object.values(pools).reduce((s,p)=>s+p.length,0);
+  const cur=pools[selectedCat]?.length||0;
+  $('diceHint').textContent=cur>0?`從 ${cur} 間中隨機抽・按下骰子！`:'此類型無資料';
+  if(total===0)$('diceHint').textContent='找不到附近資料';
+}
+
+// ── CATEGORY ─────────────────────────────────────
+function pickCat(btn){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedCat=btn.dataset.cat;
+  $('rcard').classList.remove('show');
+  $('skeleton').style.display='flex';
+  const cnt=pools[selectedCat]?.length||0;
+  $('diceHint').textContent=cnt>0?`從 ${cnt} 間中隨機抽・按下骰子！`:'此類型無資料';
 }
 
 // ── ROLL ─────────────────────────────────────────
-function weightedPick(){
-  const prefs=PREFS[getMeal()]||[];
-  const scored=allRest.map(r=>{
-    const bonus=prefs.includes(r.cuisine.l)?3:1;
-    return{r,w:bonus*Math.max(1,1200-r.dist)};
-  });
-  let rnd=Math.random()*scored.reduce((s,x)=>s+x.w,0);
-  for(const{r,w}of scored){rnd-=w;if(rnd<=0)return r;}
-  return scored[0].r;
-}
-
 function roll(){
   if(rolling)return;
   if(!locReady){showPerm();return}
-  if(!selectedCat){$('diceHint').textContent='請先選上方類型 ↑';return}
-  const pool=catPools[selectedCat]||[];
-  if(!pool.length){$('diceHint').textContent='這類型附近找不到';return}
+  const pool=pools[selectedCat]||[];
+  if(!pool.length){$('diceHint').textContent='此類型附近沒有資料';return}
   rolling=true;
   if(navigator.vibrate)navigator.vibrate(50);
   const btn=$('diceBtn');
   btn.classList.remove('rolling');void btn.offsetWidth;btn.classList.add('rolling');
-  $('rcard').classList.remove('show');
-  $('skeleton').style.display='flex';
+  $('rcard').classList.remove('show');$('skeleton').style.display='flex';
   setTimeout(()=>{
-    // weighted by proximity
-    const scored=pool.map(r=>({r,w:Math.max(1,1200-r.dist)}));
-    let rnd=Math.random()*scored.reduce((s,x)=>s+x.w,0);
-    let res=scored[0].r;
+    const scored=pool.map(r=>({r,w:Math.max(1,1500-r.dist)}));
+    let rnd=Math.random()*scored.reduce((s,x)=>s+x.w,0),res=scored[0].r;
     for(const{r,w}of scored){rnd-=w;if(rnd<=0){res=r;break;}}
-    currentRes=res;showResult(res);
-    btn.classList.remove('rolling');rolling=false;
+    currentRes=res;showResult(res);btn.classList.remove('rolling');rolling=false;
   },740);
 }
 
-function eta(dist){const lo=Math.max(15,5+Math.ceil(dist/200));return`${lo}–${lo+10} 分`;}
+function eta(d){const lo=Math.max(15,5+Math.ceil(d/200));return`${lo}–${lo+10} 分`;}
 
 function showResult(res){
   $('skeleton').style.display='none';
-  $('rcEmoji').textContent=res.cuisine.e;
+  $('rcEmoji').textContent=res.emoji;
   $('rcName').textContent=res.name;
-  $('rcCuisine').textContent=res.cuisine.l;
+  $('rcCuisine').textContent=res.cuisine;
   $('rcAddr').textContent=res.addr||`距你 ${res.dist} m`;
   $('rcDist').textContent=res.dist>=1000?`${(res.dist/1000).toFixed(1)} km`:`${res.dist} m`;
   $('rcEta').textContent=eta(res.dist);
+
+  // show open status
+  const ohEl = $('rcOH');
+  if(res.ohStatus==='open'){
+    ohEl.textContent = '● 營業中';
+    ohEl.className = 'oh-tag oh-open';
+  } else if(res.ohStatus==='unknown'){
+    ohEl.textContent = '? 未知營業時間';
+    ohEl.className = 'oh-tag oh-unknown';
+  }
+  ohEl.title = res.oh || '';
+
   $('rcard').classList.add('show');
-  $('diceHint').textContent='不滿意？再按一次 🎲';
+  $('diceHint').textContent='不滿意？再按一次';
 }
 
 function openUber(){
@@ -779,7 +669,6 @@ function openUber(){
   setTimeout(()=>{if(Date.now()-t<1500)window.open(`https://www.ubereats.com/tw/search?q=${q}&pl=sap%3A${la}%2C${lo}`,'_blank')},700);
 }
 
-// ── BOOT ─────────────────────────────────────────
 if('serviceWorker'in navigator)
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 tick();setInterval(tick,1000);initLoc();

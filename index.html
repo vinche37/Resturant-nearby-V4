@@ -658,12 +658,13 @@ function processRestaurants(els){
   }
 
   const fmtCount = (arr) => {
-    const known   = arr.filter(r=>r.ohStatus==='open').length;
+    const open    = arr.filter(r=>r.ohStatus==='open').length;
     const unknown = arr.filter(r=>r.ohStatus==='unknown').length;
     if(!arr.length) return '無資料';
-    if(known===0 && unknown>0) return `${unknown} 間`;
-    if(known>0 && unknown>0)   return `${known}+${unknown} 間`;
-    return `${known} 間`;
+    if(open===0 && unknown===0) return '無資料';
+    if(open>0  && unknown>0)  return `${open} open / ${unknown} unknown`;
+    if(open>0  && unknown===0) return `${open} open`;
+    return `${unknown} unknown`;
   };
 
   $('cnt-restaurant').textContent = fmtCount(pools.restaurant);

@@ -308,6 +308,20 @@ body{
   white-space:nowrap;
 }
 .hist-btn:active{filter:brightness(.85);transform:scale(.95)}
+.hist-map{
+  flex-shrink:0;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;
+  padding:0 clamp(7px,1.6vw,10px);
+  height:clamp(20px,2.8vh,26px);
+  font-size:clamp(9px,1.1vh,11px);font-weight:600;
+  color:var(--muted);cursor:pointer;
+  transition:filter .15s,transform .12s;
+  touch-action:manipulation;
+  white-space:nowrap;display:flex;align-items:center;gap:3px;
+}
+.hist-map:active{filter:brightness(1.3);transform:scale(.95)}
 .hist-empty{
   padding:clamp(7px,1.2vh,10px) clamp(12px,3vw,16px);
   font-size:clamp(10px,1.3vh,12px);color:var(--muted2);
@@ -799,11 +813,14 @@ function addHistory(res){
     const q=encodeURIComponent(h.res.name);
     const la=lat||25.033,lo=lng||121.565;
     const uberUrl=`https://www.ubereats.com/tw/search?q=${q}&pl=sap%3A${la}%2C${lo}`;
+    const mapsQuery=encodeURIComponent(h.res.name+(h.res.addr?' '+h.res.addr:''));
+    const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
     return`<div class="hist-row">
       <span class="hist-emoji">${h.res.emoji}</span>
       <span class="hist-name">${h.res.name}</span>
       <span class="hist-cat">${h.res.cuisine}</span>
       <span class="hist-time">${h.time}</span>
+      <button class="hist-map" onclick="window.open('${mapsUrl}','_blank')">🗺 時段</button>
       <button class="hist-btn" onclick="openHistUber('${uberUrl}')">● 訂</button>
     </div>`;
   }).join('');

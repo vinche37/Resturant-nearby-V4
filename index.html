@@ -283,7 +283,7 @@ body{
   flex-shrink:0;
 }
 .hist-row{
-  display:flex;align-items:center;gap:10px;
+  display:flex;align-items:center;gap:8px;
   padding:clamp(7px,1.2vh,10px) clamp(12px,3vw,16px);
   border-bottom:1px solid rgba(255,255,255,.04);
 }
@@ -293,6 +293,21 @@ body{
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hist-cat{font-size:clamp(9px,1.1vh,11px);color:var(--muted);flex-shrink:0}
 .hist-time{font-size:clamp(9px,1.1vh,10px);color:var(--muted2);font-family:monospace;flex-shrink:0}
+.hist-btn{
+  flex-shrink:0;
+  background:var(--g1);
+  border:none;border-radius:20px;
+  padding:0 clamp(8px,1.8vw,12px);
+  height:clamp(20px,2.8vh,26px);
+  font-size:clamp(9px,1.1vh,11px);font-weight:700;
+  color:#fff;cursor:pointer;
+  letter-spacing:.3px;
+  box-shadow:0 2px 8px rgba(6,193,103,.4);
+  transition:filter .15s,transform .12s;
+  touch-action:manipulation;
+  white-space:nowrap;
+}
+.hist-btn:active{filter:brightness(.85);transform:scale(.95)}
 .hist-empty{
   padding:clamp(7px,1.2vh,10px) clamp(12px,3vw,16px);
   font-size:clamp(10px,1.3vh,12px);color:var(--muted2);
@@ -780,17 +795,24 @@ function addHistory(res){
   const now=new Date(),p=n=>String(n).padStart(2,'0');
   history.unshift({res, time:`${p(now.getHours())}:${p(now.getMinutes())}`});
   const wrap=$('histWrap');
-  $('histEmpty')&&($('histEmpty').style.display='none');
-  wrap.innerHTML=history.map(h=>`
-    <div class="hist-row">
+  wrap.innerHTML=history.map(h=>{
+    const q=encodeURIComponent(h.res.name);
+    const la=lat||25.033,lo=lng||121.565;
+    const uberUrl=`https://www.ubereats.com/tw/search?q=${q}&pl=sap%3A${la}%2C${lo}`;
+    return`<div class="hist-row">
       <span class="hist-emoji">${h.res.emoji}</span>
       <span class="hist-name">${h.res.name}</span>
       <span class="hist-cat">${h.res.cuisine}</span>
       <span class="hist-time">${h.time}</span>
-    </div>`).join('');
+      <button class="hist-btn" onclick="openHistUber('${uberUrl}')">● 訂</button>
+    </div>`;
+  }).join('');
   if(history.length>1) wrap.classList.add('has-more');
-  // scroll to top so newest is visible
   wrap.scrollTop=0;
+}
+
+function openHistUber(url){
+  window.open(url,'_blank');
 }
 
 function showResult(res){
